@@ -6,6 +6,8 @@ public class Book {
     private boolean available;
     public Integer Id;
 
+    public Book() {}
+
     public Book(String name, String author, boolean available, Integer Id) {
         this.author = author;
         this.name = name;
@@ -30,7 +32,10 @@ public class Book {
     }
 
     public boolean isAvailable() {
-        return available;
+        return available = true;
+    }
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
     public Integer getId() {
         return Id;

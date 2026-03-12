@@ -8,6 +8,11 @@ public class Loan {
     private LocalDateTime loanDate =  LocalDateTime.now();
     private LocalDateTime returnDate;
 
+    public Loan(Book book, User user, LocalDateTime loanDate) {
+        this.book = book;
+        this.user = user;
+        this.loanDate = loanDate;
+    }
 
     public Loan(Book book, User user, LocalDateTime loanDate, LocalDateTime returnDate) {
         this.book = book;
@@ -34,6 +39,9 @@ public class Loan {
 
     public LocalDateTime getLoanDate() {
         return loanDate;
+    }
+    public void setLoanDate(LocalDateTime loanDate) {
+        this.loanDate = loanDate;
     }
 
     public LocalDateTime getReturnDate() {
