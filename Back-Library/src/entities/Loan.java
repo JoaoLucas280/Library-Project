@@ -7,6 +7,7 @@ public class Loan {
     private User user;
     private LocalDateTime loanDate =  LocalDateTime.now();
     private LocalDateTime returnDate;
+    private LocalDateTime dueDate;
 
     public Loan(Book book, User user, LocalDateTime loanDate) {
         this.book = book;
@@ -14,11 +15,12 @@ public class Loan {
         this.loanDate = loanDate;
     }
 
-    public Loan(Book book, User user, LocalDateTime loanDate, LocalDateTime returnDate) {
+    public Loan(Book book, User user, LoanType loanType) {
         this.book = book;
         this.user = user;
-        this.loanDate = loanDate;
-        this.returnDate = returnDate;
+        this.loanDate = LocalDateTime.now();
+        this.dueDate = loanDate.plusDays(loanType.getDays());
+
     }
 
     public Book getBook() {
@@ -44,11 +46,28 @@ public class Loan {
         this.loanDate = loanDate;
     }
 
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
     public LocalDateTime getReturnDate() {
         return returnDate;
     }
 
     public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public enum LoanType{
+        NORMAL(30),
+        EXTENDED(60);
+
+        private int days;
+        LoanType(int days) {
+            this.days = days;
+        }
+        public int getDays() {
+            return days;
+        }
     }
 }

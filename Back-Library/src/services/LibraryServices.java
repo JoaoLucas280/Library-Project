@@ -54,12 +54,21 @@ public class LibraryServices {
             return null;
         }
         if (book.isAvailable()) {
-            Loan loan = new Loan(book, user,  LocalDateTime.now());
+            Loan loan = new Loan(book, user, LocalDateTime.now());
             loans.add(loan);
             book.setAvailable(false);
             return loan;
         }
         return null;
+    }
+    public List<Loan> getOverdueLoans() {
+        List<Loan> overdueLoans = new ArrayList<>();
+        for (Loan loan : loans) {
+            if (loan.getReturnDate() == null && LocalDateTime.now().isAfter(loan.getDueDate())) {
+                overdueLoans.add(loan);
+            }
+        }
+        return overdueLoans;
     }
 
     public Loan returnBook(int bookId, int userId) {
@@ -69,18 +78,37 @@ public class LibraryServices {
             return null;
         }
         if (!book.isAvailable()) {
-                for (Loan loan : loans) {
-                    if (loan.getBook().getId() == bookId && loan.getUser().getId() == userId) {
-                        if(loan.getReturnDate() == null) {
-                            loan.setReturnDate(LocalDateTime.now());
-                            book.setAvailable(true);
-                            return loan;
-                        }
+            for (Loan loan : loans) {
+                if (loan.getBook().getId() == bookId && loan.getUser().getId() == userId) {
+                    if (loan.getReturnDate() == null) {
+                        loan.setReturnDate(LocalDateTime.now());
+                        book.setAvailable(true);
                     }
                 }
             }
+        }
 
         return null;
+    }
+    public List<Loan> getActiveLoans(){
+        List <Loan> activeLoans = new ArrayList<>();
+        for (Loan loan : loans) {
+            if (loan.getReturnDate() == null && LocalDateTime.now().isBefore(loan.getDueDate())) {
+                if(loan.getReturnDate() == null && LocalDateTime.now().isAfter(loan.getDueDate())) {
+                    activeLoans.add(loan);
+                }
+            }
+        }
+        return activeLoans;
+    }
+    public List<Loan> getLoansByUser(int userId) {
+        List<Loan> userLoans = new ArrayList<>();
+        for (Loan loan : loans) {
+            if (loan.getUser().getId() == userId){
+                userLoans.add(loan);
+            }
+        }
+        return userLoans;
     }
 }
 
