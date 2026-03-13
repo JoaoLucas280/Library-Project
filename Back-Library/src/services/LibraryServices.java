@@ -18,15 +18,29 @@ public class LibraryServices {
    private List<Loan> loans = new ArrayList<>();
 
     public void signInBook(Book book) {
-        books.add(book);
+        if (getBook(book.getId()) == null) {
+            books.add(book);
+        }
     }
     public void signOutBook(Book book) {
+        for (Loan activeLoan : getActiveLoans()){
+            if (activeLoan.getBook() ==  book){
+                return;
+            }
+        }
         books.remove(book);
     }
     public void signInUser(User user) {
-        users.add(user);
+        if(getUser(user.getId()) == null) {
+            users.add(user);
+        }
     }
     public void signOutUser(User user) {
+        for (Loan  activeLoan : getActiveLoans()){
+            if(activeLoan.getUser() ==  user){
+                return;
+            }
+        }
         users.remove(user);
     }
 
