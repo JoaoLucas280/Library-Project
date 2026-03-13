@@ -4,7 +4,7 @@ public class Book {
     private String name;
     private String author;
     private boolean available;
-    public Integer Id;
+    private Integer Id;
 
     public Book() {}
 
@@ -32,7 +32,7 @@ public class Book {
     }
 
     public boolean isAvailable() {
-        return available = true;
+        return available;
     }
     public void setAvailable(boolean available) {
         this.available = available;
@@ -46,7 +46,6 @@ public class Book {
         return "Book{" +
                 "name='" + name + '\'' +
                 ", author='" + author + '\'' +
-                ", available=" + available +
                 ", Id=" + Id +
                 '}';
     }
