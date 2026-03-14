@@ -8,10 +8,9 @@ public class Book {
 
     public Book() {}
 
-    public Book(String name, String author, boolean available, Integer Id) {
+    public Book(String name, String author, Integer Id) {
         this.author = author;
         this.name = name;
-        this.available = available;
         this.Id = Id;
     }
 
