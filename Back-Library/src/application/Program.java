@@ -1,16 +1,16 @@
 package application;
 
 import entities.Book;
+import entities.Loan;
 import entities.User;
 import services.LibraryServices;
 
-import java.util.Random;
+
 import java.util.Scanner;
 
 public class Program {
     static void main() {
         Scanner sc = new Scanner(System.in);
-        Random randomizer = new Random(100);
         LibraryServices libraryServices = new LibraryServices();
         int choice2 = 1;
         int choice3 = 1;
@@ -45,30 +45,37 @@ public class Program {
                         String signInBookName = sc.next();
                         System.out.print("Digite o nome do autor: ");
                         String signInBookAuthor = sc.next();
-                        int signInBookId = randomizer.nextInt(100) + 1;
-                        System.out.print("ID do livro: " + signInBookId);
+                        System.out.println("Digite o ID do livro: ");
+                        int signInBookId = sc.nextInt();
                         Book bookSigned = new Book(signInBookName, signInBookAuthor, signInBookId);
                         libraryServices.signInBook(bookSigned);
                         break;
                     case 2:
                         System.out.print("Digite o ID do usuário: ");
                         int signInUserId = sc.nextInt();
-                        if(libraryServices.getUser(signInUserId) != null) {
+                        if (libraryServices.getUser(signInUserId) != null) {
                             libraryServices.signOutUser(libraryServices.getUser(signInUserId));
                             System.out.println("Usuário removido com sucesso! ");
-                        }else {
+                        } else {
                             System.out.println("Usuário Inválido. ");
                         }
                         break;
                     case 3:
                         System.out.println("Digite o ID do livro: ");
                         int signOutBookId = sc.nextInt();
-                        if(libraryServices.getBook(signOutBookId) != null) {
-                            libraryServices.signOutBook(libraryServices.getBook(signOutBookId));
-                            System.out.println("Livro removido com sucesso! ");
-                        }else{
+                        Book bookToRemove = libraryServices.getBook(signOutBookId);
+                        if (bookToRemove == null) {
                             System.out.println("Livro Inválido");
+                        } else {
+                            boolean removed = libraryServices.signOutBook(bookToRemove);
+
+                        if (removed) {
+                            System.out.println("Livro removido com sucesso!");
+                        } else {
+                            System.out.println("Não foi possível remover o livro, pois ele possui empréstimo ativo.");
                         }
+                     }
+
                         break;
                     case 4:
                         System.out.println("Lista de empréstimos ativos: " + libraryServices.getActiveLoans());
@@ -100,42 +107,69 @@ public class Program {
                 System.out.println("2. REMOVER CONTA");
                 System.out.println("3. EMPRÉSTIMO DE LIVRO");
                 System.out.println("4. RETORNO DE LIVRO");
-                System.out.println("5. VISUALIZAR QUANTIDADE DE EMPRÉSTIMOS");
+                System.out.println("5. VISUALIZAR LISTA DE EMPRÉSTIMOS");
+                System.out.println("6. LISTAR LIVROS");
                 System.out.println("0. SAIR DO PROGRAMA");
                 choice3 = sc.nextInt();
 
                 switch (choice3) {
                     case 1:
-                        System.out.println("Digite seu nome: ");
+                        System.out.print("Digite seu nome: ");
                         String signInUserName = sc.next();
-                        System.out.println("Digite seu email: ");
+                        System.out.print("Digite seu email: ");
                         String signInUserEmail = sc.next();
-                        int SignInUserId = randomizer.nextInt(100) + 1;
-                        System.out.println("ID gerado: " + SignInUserId);
+                        System.out.print("Digite o ID do usuário: ");
+                        int SignInUserId = sc.nextInt();
                         User userSigned = new User(signInUserName, signInUserEmail, SignInUserId);
                         libraryServices.signInUser(userSigned);
                         break;
                     case 2:
                         System.out.print("Digite seu ID: ");
-                        int signOutBookId = sc.nextInt();
-                        libraryServices.signOutUser(libraryServices.getUser(signOutBookId));
-                        System.out.println("Usuário removido com sucesso! ");
+                        int signOutUserId = sc.nextInt();
+                        User userToRemove = libraryServices.getUser(signOutUserId);
+                        if(userToRemove == null) {
+                            System.out.println("Usuário inválido");
+                        } else {
+                            boolean removed = libraryServices.signOutUser(userToRemove);
+                            if (removed) {
+                                System.out.println("Usuário removido com sucesso!");
+                            } else {
+                                System.out.println("Não foi possível remover o usuário, pois ele possui empréstimo ativo.");
+                            }
+                        }
                         break;
                     case 3:
                         System.out.print("Digite o Id do livro: ");
                         int bookId = sc.nextInt();
                         System.out.print("Digite seu Id: ");
                         int userId = sc.nextInt();
-                        libraryServices.loanBook(bookId, userId);
-                        System.out.println("Empréstimo realizado com sucesso! ");
+                        if (libraryServices.getBook(bookId) == null || libraryServices.getUser(userId) == null) {
+                            System.out.println("Livro ou usuário inválido");
+                        }else {
+                            Loan loanCreated = libraryServices.loanBook(bookId, userId);
+                            if (loanCreated == null) {
+                                System.out.println("Empréstimo negado");
+                            }else{
+                                System.out.println("Empréstimo criado com sucesso!");
+                            }
+                        }
                         break;
                     case 4:
                         System.out.print("Digite o Id do livro: ");
                         int bookReturnId = sc.nextInt();
                         System.out.print("Digite seu Id: ");
                         int userReturnId = sc.nextInt();
-                        libraryServices.returnBook(bookReturnId, userReturnId);
-                        System.out.println("Livro retornado com sucesso! ");
+                        if (libraryServices.getBook(bookReturnId) == null || libraryServices.getUser(userReturnId) == null) {
+                            System.out.println("Livro ou usuário inválido");
+                        }
+                        else{
+                            Loan loanReturned = libraryServices.returnBook(bookReturnId, userReturnId);
+                            if(loanReturned == null) {
+                                System.out.println("Falha ao retornar empréstimo");
+                            }else{
+                                System.out.println("Empréstimo retornado com sucesso!");
+                            }
+                        }
 
                         break;
                     case 5:

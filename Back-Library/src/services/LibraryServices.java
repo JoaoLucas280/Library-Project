@@ -22,26 +22,34 @@ public class LibraryServices {
             books.add(book);
         }
     }
-    public void signOutBook(Book book) {
-        for (Loan activeLoan : getActiveLoans()){
-            if (activeLoan.getBook() ==  book){
-                return;
+    public boolean signOutBook(Book book) {
+        if (book == null){
+            return false;
+        }
+        for (Loan loan : loans) {
+            if (loan.getBook() == book){
+                return false;
             }
         }
         books.remove(book);
+        return true;
     }
     public void signInUser(User user) {
         if(getUser(user.getId()) == null) {
             users.add(user);
         }
     }
-    public void signOutUser(User user) {
-        for (Loan  activeLoan : getActiveLoans()){
-            if(activeLoan.getUser() ==  user){
-                return;
+    public boolean signOutUser(User user) {
+        if (user == null) {
+            return false;
+        }
+        for (Loan loan : loans){
+            if (loan.getUser() == user){
+                return false;
             }
         }
         users.remove(user);
+        return true;
     }
 
     public User getUser(int id) {
