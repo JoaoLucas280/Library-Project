@@ -11,16 +11,21 @@ import java.util.List;
 
 public class LibraryServices {
 
-
+    private int nextBookId = 1;
+    private int nextUserId = 1;
 
    private List<User> users = new ArrayList<>();
     private List<Book> books = new ArrayList<>();
    private List<Loan> loans = new ArrayList<>();
 
+    public void setNextUserId(int nextUserId) {
+        this.nextUserId = nextUserId;
+    }
+
     public void signInBook(Book book) {
-        if (getBook(book.getId()) == null) {
-            books.add(book);
-        }
+        book.setId(nextBookId);
+        nextBookId++;
+        books.add(book);
     }
     public boolean signOutBook(Book book) {
         if (book == null){
@@ -35,9 +40,9 @@ public class LibraryServices {
         return true;
     }
     public void signInUser(User user) {
-        if(getUser(user.getId()) == null) {
-            users.add(user);
-        }
+        user.setId(nextUserId);
+        nextUserId++;
+        users.add(user);
     }
     public boolean signOutUser(User user) {
         if (user == null) {
@@ -92,6 +97,9 @@ public class LibraryServices {
         }
         return overdueLoans;
     }
+    public List<Book> getBooks() {
+        return books;
+        }
 
     public Loan returnBook(int bookId, int userId) {
         Book book = getBook(bookId);

@@ -5,7 +5,6 @@ import entities.Loan;
 import entities.User;
 import services.LibraryServices;
 
-
 import java.util.Scanner;
 
 public class Program {
@@ -36,28 +35,35 @@ public class Program {
                 System.out.println("4. LISTAR EMPRÉSTIMOS ATIVOS");
                 System.out.println("5. LISTAR EMPRÉSTIMOS ATRASADOS");
                 System.out.println("6. LISTAR EMPRÉSTIMO POR USUÁRIO");
+                System.out.println("7. LISTAR LIVROS");
                 System.out.println("0. SAIR DO PROGRAMA");
                 choice2 = sc.nextInt();
+                sc.nextLine();
 
                 switch (choice2) {
                     case 1:
                         System.out.print("Digite o nome do livro: ");
-                        String signInBookName = sc.next();
+                        String signInBookName = sc.nextLine();
                         System.out.print("Digite o nome do autor: ");
-                        String signInBookAuthor = sc.next();
-                        System.out.println("Digite o ID do livro: ");
-                        int signInBookId = sc.nextInt();
-                        Book bookSigned = new Book(signInBookName, signInBookAuthor, signInBookId);
+                        String signInBookAuthor = sc.nextLine();
+                        Book bookSigned = new Book(signInBookName, signInBookAuthor);
                         libraryServices.signInBook(bookSigned);
+                        System.out.println("Livro cadastrado com sucesso!");
+                        System.out.println("ID gerado: " + bookSigned.getId());
                         break;
                     case 2:
                         System.out.print("Digite o ID do usuário: ");
-                        int signInUserId = sc.nextInt();
-                        if (libraryServices.getUser(signInUserId) != null) {
-                            libraryServices.signOutUser(libraryServices.getUser(signInUserId));
-                            System.out.println("Usuário removido com sucesso! ");
+                        int signOutUserId = sc.nextInt();
+                        User userToRemove = libraryServices.getUser(signOutUserId);
+                        if(userToRemove == null) {
+                            System.out.println("Usuário inválido");
                         } else {
-                            System.out.println("Usuário Inválido. ");
+                            boolean removed = libraryServices.signOutUser(userToRemove);
+                            if (removed) {
+                                System.out.println("Usuário removido com sucesso!");
+                            } else {
+                                System.out.println("Não foi possível remover o usuário, pois ele possui empréstimo ativo.");
+                            }
                         }
                         break;
                     case 3:
@@ -88,8 +94,15 @@ public class Program {
                         int userId = sc.nextInt();
                         System.out.println("Retornando empréstimos ativos\n" + libraryServices.getLoansByUser(userId));
                         break;
+                    case 7:
+                        System.out.println("CATÁLOGO DE LIVROS");
+                        System.out.println(libraryServices.getBooks());
+                        break;
                     case 0:
                         System.out.println("Saindo do programa...");
+                        break;
+                    default:
+                        System.out.println("COMANDO INVÁLIDO");
                         break;
                 }
             }
@@ -111,17 +124,18 @@ public class Program {
                 System.out.println("6. LISTAR LIVROS");
                 System.out.println("0. SAIR DO PROGRAMA");
                 choice3 = sc.nextInt();
+                sc.nextLine();
 
                 switch (choice3) {
                     case 1:
                         System.out.print("Digite seu nome: ");
-                        String signInUserName = sc.next();
+                        String signInUserName = sc.nextLine();
                         System.out.print("Digite seu email: ");
-                        String signInUserEmail = sc.next();
-                        System.out.print("Digite o ID do usuário: ");
-                        int SignInUserId = sc.nextInt();
-                        User userSigned = new User(signInUserName, signInUserEmail, SignInUserId);
+                        String signInUserEmail = sc.nextLine();
+                        User userSigned = new User(signInUserName, signInUserEmail);
                         libraryServices.signInUser(userSigned);
+                        System.out.println("Usuário cadastrado com sucesso!");
+                        System.out.print("ID gerado: " + userSigned.getId());
                         break;
                     case 2:
                         System.out.print("Digite seu ID: ");
@@ -177,6 +191,15 @@ public class Program {
                         int userLoansId = sc.nextInt();
                         System.out.println("Empréstimos da conta: " + userLoansId);
                         System.out.println(libraryServices.getLoansByUser(userLoansId));
+                        break;
+                    case 6:
+                        System.out.println("CATÁLOGO DE LIVROS");
+                        System.out.println(libraryServices.getBooks());
+                        break;
+                    case 0:
+                        System.out.println("Saindo do programa...");
+                    default:
+                        System.out.println("COMANDO INVÁLIDO");
                         break;
                 }
             }

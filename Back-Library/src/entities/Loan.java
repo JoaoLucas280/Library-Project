@@ -40,7 +40,6 @@ public class Loan {
     }
 
 
-
     public enum LoanType{
         NORMAL(30),
         EXTENDED(60);

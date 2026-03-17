@@ -8,10 +8,9 @@ public class Book {
 
     public Book() {}
 
-    public Book(String name, String author, Integer Id) {
+    public Book(String name, String author) {
         this.author = author;
         this.name = name;
-        this.Id = Id;
     }
 
     public String getName() {
@@ -38,6 +37,9 @@ public class Book {
     }
     public Integer getId() {
         return Id;
+    }
+    public void setId(Integer Id) {
+        this.Id = Id;
     }
 
     @Override

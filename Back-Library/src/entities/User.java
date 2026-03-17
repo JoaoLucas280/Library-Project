@@ -11,14 +11,12 @@ public class User {
         this.name = name;
         this.email = email;
     }
-    public  User(String name, String email, Integer id) {
-        this.Id = id;
-        this.name = name;
-        this.email = email;
-    }
 
     public Integer getId() {
         return Id;
+    }
+    public void setId(Integer Id) {
+        this.Id = Id;
     }
     public String getName() {
         return name;
